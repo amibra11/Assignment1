@@ -60,3 +60,23 @@ The repository demonstrates a common Git workflow:
 - hotfix branches handle urgent fixes 
 
 This structure allows multiple features to be developed in parallel while keeping the main branch stable.
+
+## Learning Summary
+
+### Merge vs Rebase
+- **Merge**: Creates a merge commit, preserves branch history (feature1, feature3)
+- **Rebase**: Rewrites history, creates linear timeline (feature2)
+- **Squash**: Combines multiple commits into one (feature3 hint commits)
+- **Cherry-pick**: Applies specific commits to different branches (hotfix to main)
+
+### Observations
+- **feature1**: Used merge - preserved history but created extra merge commits
+- **feature2**: Used rebase - linear history but lost original branch context  
+- **feature3**: Squashed before merge - clean history with single meaningful commit
+- **hotfix**: Cherry-picked to main - applied critical fix without merging entire branch
+
+### When to Use Each
+- **Merge**: When collaborating with others, want to preserve history
+- **Rebase**: Solo feature branches, want clean linear history
+- **Squash**: Before merging to main/dev to clean up WIP commits
+- **Cherry-pick**: Critical fixes that need to go to multiple branches
