@@ -80,3 +80,8 @@ This structure allows multiple features to be developed in parallel while keepin
 - **Rebase**: Solo feature branches, want clean linear history
 - **Squash**: Before merging to main/dev to clean up WIP commits
 - **Cherry-pick**: Critical fixes that need to go to multiple branches
+
+## Learning Summary
+
+Completed Task 2 steps: feature merges, rebasing, squashing, cherry-picking.
+Gained experience with Git workflows and conflict resolution.
