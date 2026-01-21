@@ -1,43 +1,98 @@
 public class GameEngine {
+    private static final int MAX_ATTEMPTS = 10;
+
     private final int min;
     private final int max;
     private int target;
     private int attempts;
     private boolean gameWon;
+    private boolean userQuit;
+    private boolean gameOver;
+    private boolean hintsEnabled;
 
     public GameEngine(int min, int max) {
         this.min = min;
         this.max = max;
         this.attempts = 0;
         this.gameWon = false;
+        this.userQuit = false;
+        this.gameOver = false;
+        this.hintsEnabled = true;
         reset();
     }
 
     public GuessResult makeGuess(int guess) {
+        // Check if user wants to quit (negative number)
+        if (guess < 0) {
+            userQuit = true;
+            return new GuessResult(false, "Exiting game...", attempts);
+        }
+
+        // Check if game over from max attempts
+        if (attempts >= MAX_ATTEMPTS || gameOver) {
+            gameOver = true;
+            return new GuessResult(false, "Game Over! You've used all " + MAX_ATTEMPTS + " attempts. The number was " + target + ".", attempts);
+        }
+
         attempts++;
 
+        GuessResult result;
         if (guess == target) {
             gameWon = true;
-            return new GuessResult(true, "Correct! You guessed it in " + attempts + " attempts.", attempts);
+            result = new GuessResult(true, "Correct! You guessed it in " + attempts + " attempts.", attempts);
         } else if (guess < target) {
-            return new GuessResult(false, "Too low!", attempts);
+            result = new GuessResult(false, "Too low! Try a higher number.", attempts);
         } else {
-            return new GuessResult(false, "Too high!", attempts);
+            result = new GuessResult(false, "Too high! Try a lower number.", attempts);
         }
+
+        // Set remaining attempts
+        int remaining = MAX_ATTEMPTS - attempts;
+        result.setRemainingAttempts(remaining);
+
+        // Add hint if hints enabled and conditions met
+        if (hintsEnabled) {
+            String hint = getHint(guess);
+            result.setHint(hint);
+        }
+
+        return result;
     }
 
     public void reset() {
         target = Utils.randomInt(min, max);
         attempts = 0;
         gameWon = false;
+        userQuit = false;
+        gameOver = false;
     }
 
     public boolean isGameWon() {
         return gameWon;
     }
 
+    public boolean hasUserQuit() {
+        return userQuit;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public boolean isHintsEnabled() {
+        return hintsEnabled;
+    }
+
+    public void setHintsEnabled(boolean enabled) {
+        this.hintsEnabled = enabled;
+    }
+
     public int getAttempts() {
         return attempts;
+    }
+
+    public int getMaxAttempts() {
+        return MAX_ATTEMPTS;
     }
 
     public int getMin() {
@@ -46,6 +101,20 @@ public class GameEngine {
 
     public int getMax() {
         return max;
+    }
+
+    private String getHint(int guess) {
+        if (!hintsEnabled) {
+            return "";
+        }
+
+        int diff = Math.abs(target - guess);
+        if (attempts >= 3 && diff <= 10) {
+            return " HINT: You're very close!";
+        } else if (attempts >= 5 && diff <= 20) {
+            return " HINT: Getting warmer!";
+        }
+        return "";
     }
 
     // For testing purposes only
