@@ -85,3 +85,7 @@ This structure allows multiple features to be developed in parallel while keepin
 
 Completed Task 2 steps: feature merges, rebasing, squashing, cherry-picking.
 Gained experience with Git workflows and conflict resolution.
+
+## GitHub Workflow Practice
+- Created PRs on GitHub
+- Practiced code review workflow
